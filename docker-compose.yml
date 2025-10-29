@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: feedback-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: feedback
+    ports:
+      - "5432:5432"
+    volumes:
+      # Persist data between restarts
+      - postgres_data:/var/lib/postgresql/data
+      # Mount migrations for easy access
+      - ./migrations:/migrations
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional: pgAdmin for GUI database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: feedback-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    profiles:
+      - tools  # Only starts if you run: docker-compose --profile tools up
+
+volumes:
+  postgres_data:
