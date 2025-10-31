@@ -25,3 +25,14 @@ type Vote struct {
 	UserID     *int      `json:"userId,omitempty"`
 	CreatedAt  time.Time `json:"createdAt"`
 }
+
+// GetAccumulatedVotes calculates and returns the total number of votes for this feedback
+func (f *Feedback) GetAccumulatedVotes(votes []Vote) int {
+	voteCount := 0
+	for _, vote := range votes {
+		if vote.ID == f.ID {
+			voteCount++
+		}
+	}
+	return voteCount
+}
