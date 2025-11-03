@@ -30,7 +30,7 @@ type Vote struct {
 func (f *Feedback) GetAccumulatedVotes(votes []Vote) int {
 	voteCount := 0
 	for _, vote := range votes {
-		if vote.ID == f.ID {
+		if vote.FeedbackID == f.ID {
 			voteCount++
 		}
 	}
