@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	"collector-agent/app/models/enum"
+	"feedback-agent/app/models/enum"
 )
 
 type Feedback struct {
@@ -26,12 +26,4 @@ type Vote struct {
 	CreatedAt  time.Time `json:"createdAt"`
 }
 
-func (f *Feedback) GetAccumulatedVotes(votes []Vote) int {
-	voteCount := 0
-	for _, vote := range votes {
-		if vote.FeedbackID == f.ID {
-			voteCount++
-		}
-	}
-	return voteCount
-}
+
