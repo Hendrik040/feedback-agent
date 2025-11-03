@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
@@ -32,12 +34,14 @@ func main() {
 	}
 	defer db.Close()
 
-	// Test the connection
-	if err := db.Ping(); err != nil {
+	// Test the connection with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	
+	if err := db.PingContext(ctx); err != nil {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 	log.Println("Successfully connected to database!")
-
 	// Setup Gin router
 	router := gin.Default()
 
